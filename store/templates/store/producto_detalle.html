@@ -1,0 +1,52 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {# Usamos el nombre del producto en el título de la página #}
+    <title>{{ producto.nombre }} - 10dencias</title>
+    <link rel="stylesheet" href="{% static 'store/css/styles.css' %}">
+</head>
+<body>
+
+    <header>
+        {# Un enlace para volver fácilmente al catálogo #}
+        <a href="{% url 'catalogo' %}" class="back-link">← Volver al Catálogo</a>
+        <h1>Detalles del Producto</h1>
+    </header>
+
+    <main>
+        <div class="detalle-container">
+            <div class="detalle-imagen">
+                <img src="{{ producto.url_imagen }}" alt="Imagen de {{ producto.nombre }}">
+            </div>
+            <div class="detalle-info">
+                <h2>{{ producto.nombre }}</h2>
+                <p class="precio-detalle">${{ producto.precio }}</p>
+                
+                <hr>
+
+                <h3>Personaliza tu producto</h3>
+                <p>Elige una de nuestras frases motivacionales:</p>
+
+                    <form action="{% url 'add_to_cart' producto.id %}" method="POST" class="frases-form">
+                        {% csrf_token %}
+
+                        <div class="frases-selector">
+                            {% for frase in frases %}
+                            <div class="frase-option">
+                                <input type="radio" id="frase{{ frase.id }}" name="frase_seleccionada" value="{{ frase.id }}" required>
+                                <label for="frase{{ frase.id }}">{{ frase.texto }}</label>
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                        <button type="submit" class="btn-comprar">Añadir al Carrito</button>
+                    </form>
+            </div>
+        </div>
+    </main>
+
+</body>
+</html>

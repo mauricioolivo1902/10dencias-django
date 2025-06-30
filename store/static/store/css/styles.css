@@ -1,0 +1,274 @@
+/* Estilos generales y variables */
+:root {
+    --primary-color: #2c3e50;
+    --secondary-color: #3498db;
+    --background-color: #ecf0f1;
+    --card-background: #ffffff;
+    --text-color: #34495e;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+header {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 1rem 2rem;
+    text-align: center;
+}
+
+main {
+    padding: 2rem;
+}
+
+/* * APLICANDO CSS GRID
+ * Usamos Grid para el layout principal del catálogo. Es ideal para crear
+ * una cuadrícula bidimensional y responsiva.
+*/
+.catalogo-container {
+    display: grid;
+    /* * `repeat(auto-fit, minmax(280px, 1fr))` crea columnas flexibles.
+     * - `auto-fit`: Llena el espacio con tantas columnas como quepan.
+     * - `minmax(280px, 1fr)`: Cada columna tendrá un mínimo de 280px y se expandirá
+     * para ocupar el espacio disponible (1fr). ¡Esto lo hace responsivo!
+    */
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem; /* Espacio entre las tarjetas */
+}
+
+/* * APLICANDO FLEXBOX
+ * Usamos Flexbox para organizar el contenido DENTRO de cada tarjeta.
+ * Es perfecto para alinear elementos en una sola dimensión (vertical en este caso).
+*/
+.producto-card {
+    background-color: var(--card-background);
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    /* Configuración de Flexbox */
+    display: flex;
+    flex-direction: column; /* Alinea los hijos verticalmente */
+    justify-content: space-between; /* Empuja el contenido para ocupar todo el alto */
+}
+
+.producto-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.producto-card img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover; /* Asegura que la imagen cubra el espacio sin deformarse */
+}
+
+.producto-card h2 {
+    font-size: 1.25rem;
+    margin: 1rem;
+    color: var(--primary-color);
+}
+
+.producto-card .precio {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--secondary-color);
+    margin: 0 1rem 1rem 1rem;
+    align-self: flex-end; /* Alinea el precio a la derecha */
+}
+
+/* --- Estilos para la página de detalle del producto --- */
+
+/* Enlace para volver */
+.back-link {
+    display: block;
+    width: fit-content;
+    margin: 0 auto 1rem;
+    color: white;
+    text-decoration: none;
+    background-color: var(--secondary-color);
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.back-link:hover {
+    background-color: #2980b9;
+}
+
+/* Contenedor principal de la página de detalle (Flexbox) */
+.detalle-container {
+    display: flex;
+    flex-wrap: wrap; /* Permite que los items pasen a la siguiente línea en pantallas pequeñas */
+    gap: 2rem;
+    background-color: var(--card-background);
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.detalle-imagen, .detalle-info {
+    flex: 1; /* Ambas columnas intentarán ocupar el mismo espacio */
+    min-width: 300px; /* Ancho mínimo antes de que se rompa la línea */
+}
+
+.detalle-imagen img {
+    width: 100%;
+    border-radius: 8px;
+}
+
+.detalle-info h2 {
+    margin-top: 0;
+    font-size: 2.5rem;
+    color: var(--primary-color);
+}
+
+.precio-detalle {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--secondary-color);
+    margin-bottom: 1.5rem;
+}
+
+.frases-form {
+    margin-top: 1.5rem;
+}
+
+.frase-option {
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.frase-option input[type="radio"] {
+    margin-right: 10px;
+}
+
+.frase-option label {
+    cursor: pointer;
+}
+
+.btn-comprar {
+    display: block;
+    width: 100%;
+    padding: 1rem;
+    margin-top: 2rem;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--primary-color);
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-comprar:hover {
+    background-color: #34495e;
+}
+
+.card-link {
+    text-decoration: none;
+    color: inherit;
+}
+/* --- Estilos para la página y formulario de Checkout --- */
+.checkout-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: var(--card-background);
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.checkout-form p {
+    margin-bottom: 1rem;
+}
+
+.checkout-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.checkout-form input[type="text"],
+.checkout-form input[type="email"],
+.checkout-form select {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Importante para que el padding no afecte el ancho total */
+}
+
+/* Estilo para los errores de validación */
+.errorlist {
+    color: #e74c3c;
+    list-style-type: none;
+    padding: 0;
+    margin-top: -0.5rem;
+    margin-bottom: 1rem;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 1rem 2rem;
+}
+
+.header-cart {
+    font-size: 1.2rem;
+}
+
+/* --- Estilos para la página del Carrito --- */
+.cart-container { max-width: 1000px; margin: 2rem auto; padding: 2rem; background-color: #fff; border-radius: 8px; }
+.cart-table { width: 100%; border-collapse: collapse; margin-bottom: 2rem; }
+.cart-table th, .cart-table td { padding: 1rem; text-align: left; border-bottom: 1px solid #ddd; }
+.cart-table th { background-color: #f8f8f8; }
+.cart-item-image img { width: 80px; height: 80px; object-fit: cover; border-radius: 4px; }
+.cart-remove-link { color: #e74c3c; text-decoration: none; }
+.cart-remove-link:hover { text-decoration: underline; }
+.cart-summary { text-align: right; }
+.cart-summary h3 { font-size: 1.8rem; }
+.cart-item-phrase {
+    font-size: 0.9rem;
+    font-style: italic;
+    color: #555;
+}
+
+.success-container {
+    max-width: 700px;
+    margin: 3rem auto;
+    padding: 2rem 3rem;
+    background-color: #fff;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+.success-icon {
+    font-size: 4rem;
+    color: #27ae60;
+    width: 80px;
+    height: 80px;
+    line-height: 80px;
+    border: 3px solid #27ae60;
+    border-radius: 50%;
+    margin: 0 auto 1.5rem;
+}
+.success-container h2 {
+    color: var(--primary-color);
+}
+.order-summary {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #eee;
+    text-align: left;
+}

@@ -1,0 +1,20 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block title %}Catálogo - 10dencias{% endblock %}
+
+{% block content %}
+    <div class="catalogo-container">
+        {% for producto in productos %}
+        <a href="{% url 'producto_detalle' producto.id %}" class="card-link">
+            <div class="producto-card">
+                <img src="{{ producto.url_imagen }}" alt="Imagen de {{ producto.nombre }}">
+                <div class="card-content">
+                    <h2>{{ producto.nombre }}</h2>
+                </div>
+                <p class="precio">${{ producto.precio }}</p>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+{% endblock %}

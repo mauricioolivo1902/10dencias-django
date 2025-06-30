@@ -1,0 +1,85 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block title %}Finalizar Compra - 10dencias{% endblock %}
+
+{% block content %}
+<div class="checkout-container">
+    <h2>Finalizar Compra</h2>
+    <p>Por favor, completa tus datos para realizar el pedido.</p>
+
+    <form method="POST" class="checkout-form">
+        {% csrf_token %}
+        
+        {# Django renderizará el formulario. 'as_p' envuelve cada campo en un párrafo <p>. #}
+        {{ form.as_p }}
+        
+        <button type="submit" class="btn-comprar">Realizar Pedido</button>
+    </form>
+</div>
+
+<script>
+    // Esperamos a que todo el contenido de la página (DOM) esté cargado.
+    document.addEventListener('DOMContentLoaded', function() {
+        
+        // Obtenemos las referencias a nuestros tres desplegables.
+        // Django genera los IDs como 'id_nombre_del_campo'.
+        const paisSelect = document.querySelector('#id_pais');
+        const provinciaSelect = document.querySelector('#id_provincia');
+        const ciudadSelect = document.querySelector('#id_ciudad');
+
+        // --- Event Listener para el desplegable de País ---
+        paisSelect.addEventListener('change', async function() {
+            const paisId = this.value; // Obtenemos el ID del país seleccionado
+
+            // Limpiamos los desplegables dependientes
+            provinciaSelect.innerHTML = '<option value="">---------</option>';
+            ciudadSelect.innerHTML = '<option value="">---------</option>';
+
+            // Si se ha seleccionado un país válido (no la opción en blanco)
+            if (paisId) {
+                // Hacemos una llamada 'fetch' a nuestra API de provincias
+                try {
+                    const response = await fetch(`/catalogo/api/provincias/?pais_id=${paisId}`);
+                    const provincias = await response.json(); // Convertimos la respuesta a JSON
+
+                    // Poblamos el desplegable de provincias con los datos recibidos
+                    provincias.forEach(function(provincia) {
+                        // Creamos un nuevo elemento <option>
+                        const option = new Option(provincia.nombre, provincia.id);
+                        // Lo añadimos al desplegable de provincias
+                        provinciaSelect.appendChild(option);
+                    });
+                } catch (error) {
+                    console.error('Error al obtener las provincias:', error);
+                }
+            }
+        });
+
+        // --- Event Listener para el desplegable de Provincia ---
+        provinciaSelect.addEventListener('change', async function() {
+            const provinciaId = this.value; // Obtenemos el ID de la provincia seleccionada
+
+            // Limpiamos el desplegable de ciudades
+            ciudadSelect.innerHTML = '<option value="">---------</option>';
+
+            if (provinciaId) {
+                try {
+                    // Llamamos a nuestra API de ciudades
+                    const response = await fetch(`/catalogo/api/ciudades/?provincia_id=${provinciaId}`);
+                    const ciudades = await response.json();
+
+                    // Poblamos el desplegable de ciudades
+                    ciudades.forEach(function(ciudad) {
+                        const option = new Option(ciudad.nombre, ciudad.id);
+                        ciudadSelect.appendChild(option);
+                    });
+                } catch (error) {
+                    console.error('Error al obtener las ciudades:', error);
+                }
+            }
+        });
+
+    });
+</script>
+{% endblock %}

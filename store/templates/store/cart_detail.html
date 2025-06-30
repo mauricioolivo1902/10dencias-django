@@ -1,0 +1,49 @@
+{% extends 'store/base.html' %}
+
+{% block title %}Tu Carrito de Compras{% endblock %}
+
+{% block content %}
+<div class="cart-container">
+    <h2>Tu Carrito de Compras</h2>
+    
+    {% if not cart %}
+        <p>Tu carrito está vacío.</p>
+        <a href="{% url 'catalogo' %}" class="btn-comprar" style="text-decoration: none; max-width: 250px;">Ver Productos</a>
+    {% else %}
+        <table class="cart-table">
+            <thead>
+                <tr>
+                    <th colspan="2">Producto</th>
+                    <th>Frase Escogida</th> {# <-- NUEVA COLUMNA #}
+                    <th>Precio</th>
+                    <th>Cantidad</th>
+                    <th>Subtotal</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item_id, item_data in cart.items %}
+                <tr>
+                    <td class="cart-item-image">
+                        <img src="{{ item_data.producto_imagen }}" alt="{{ item_data.producto_nombre }}">
+                    </td>
+                    <td>{{ item_data.producto_nombre }}</td>
+                    <td class="cart-item-phrase">{{ item_data.frase_texto }}</td> {# <-- NUEVO DATO #}
+                    <td>${{ item_data.precio|floatformat:2 }}</td>
+                    <td>{{ item_data.cantidad }}</td>
+                    <td>${{ item_data.subtotal|floatformat:2 }}</td>
+                    <td>
+                        <a href="{% url 'remove_from_cart' item_id=item_id %}" class="cart-remove-link">Eliminar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="cart-summary">
+            <h3>Total: ${{ cart_total|floatformat:2 }}</h3>
+            <a href="{% url 'checkout' %}" class="btn-comprar" style="text-decoration: none;">Proceder al Pago</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

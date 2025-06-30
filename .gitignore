@@ -1,0 +1,19 @@
+# Entorno virtual
+venv/
+
+# Base de datos local
+db.sqlite3
+*.sqlite3
+
+# Archivos de caché de Python
+__pycache__/
+*.pyc
+
+# Archivos de configuración de VSCode
+.vscode/
+
+# Archivo de variables de entorno (¡MUY IMPORTANTE!)
+.env
+
+# Carpeta de archivos estáticos de producción
+staticfiles/

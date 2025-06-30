@@ -1,0 +1,28 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}10dencias{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'store/css/styles.css' %}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <header>
+        <a href="{% url 'cart_detail' %}" style="text-decoration: none; color: white;">
+            Carrito ({{ cart_item_count }})
+        </a>
+        <div class="header-cart">
+            {# TODO: Enlazar a la página del carrito #}
+            <a href="#" style="text-decoration: none; color: white;">
+                Carrito ({{ cart_item_count }})
+            </a>
+        </div>
+    </header>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>
