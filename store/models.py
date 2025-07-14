@@ -1,3 +1,6 @@
+# Patrón: Modelo (M de MTV/MVC)
+# Define la estructura de los datos y la lógica asociada a cada entidad.
+# Repository: El ORM de Django actúa como repositorio para acceder a los datos.
 from django.db import models
 
 # Modelo para los países
@@ -16,7 +19,7 @@ class Provincia(models.Model):
     pais = models.ForeignKey(Pais, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.nombre}, {self.pais.nombre}'
+        return self.nombre
 
 # Modelo para las ciudades, relacionado con una Provincia
 class Ciudad(models.Model):
@@ -31,6 +34,7 @@ class Ciudad(models.Model):
 class FraseMotivacional(models.Model):
     # Usamos TextField porque una frase puede ser más larga que un CharField.
     texto = models.TextField()
+    destacada = models.BooleanField(default=False, help_text="Marcar si la frase debe mostrarse en la web (máximo 3)")
 
     def __str__(self):
         return self.texto[:50] # Muestra los primeros 50 caracteres en el admin
@@ -42,14 +46,26 @@ class Producto(models.Model):
     precio = models.DecimalField(max_digits=10, decimal_places=2)
     # Para la imagen, por ahora guardaremos la URL. Más adelante podríamos implementar la subida de archivos.
     url_imagen = models.URLField(max_length=255)
+    descripcion = models.TextField(blank=True, null=True)  # Nuevo campo
     
     def __str__(self):
         return self.nombre
+
+class Cupon(models.Model):
+    codigo = models.CharField(max_length=50, unique=True)
+    descuento_porcentaje = models.DecimalField(max_digits=5, decimal_places=2, help_text="Porcentaje de descuento, ej: 10 para 10%")
+    activo = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"{self.codigo} ({self.descuento_porcentaje}%)"
 
 # Modelo para la información general del pedido
 class Pedido(models.Model):
     fecha_pedido = models.DateTimeField(auto_now_add=True)
     completado = models.BooleanField(default=False)
+    # Campos para cupón y descuento
+    cupon_aplicado = models.ForeignKey(Cupon, on_delete=models.SET_NULL, null=True, blank=True)
+    descuento_aplicado = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     def __str__(self):
         return f'Pedido #{self.id} - {self.fecha_pedido.strftime("%Y-%m-%d")}'
@@ -60,6 +76,11 @@ class Pedido(models.Model):
         detalles = self.detallepedido_set.all()
         total = sum([item.subtotal for item in detalles])
         return total
+    
+    @property
+    def total_con_descuento(self):
+        # Calcula el total con descuento aplicado
+        return self.total - self.descuento_aplicado
 
 # Modelo para cada item dentro de un pedido
 class DetallePedido(models.Model):

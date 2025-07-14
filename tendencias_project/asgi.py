@@ -1,3 +1,6 @@
+# Patrón: ASGI (Asynchronous Server Gateway Interface)
+# Este archivo permite que el proyecto Django sea ejecutado en servidores asíncronos.
+# Facilita la escalabilidad y el soporte para WebSockets y tareas en tiempo real.
 """
 ASGI config for tendencias_project project.
 

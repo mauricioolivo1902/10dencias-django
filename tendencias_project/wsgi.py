@@ -1,3 +1,6 @@
+# Patrón: WSGI (Web Server Gateway Interface)
+# Este archivo permite que el proyecto Django sea ejecutado en servidores web tradicionales.
+# Es el punto de entrada para servidores como Gunicorn, uWSGI, etc.
 """
 WSGI config for tendencias_project project.
 

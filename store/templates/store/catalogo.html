@@ -1,20 +1,87 @@
 {% extends 'store/base.html' %}
 {% load static %}
 
-{% block title %}Catálogo - 10dencias{% endblock %}
+{% block title %}Catálogo - 10tendencias{% endblock %}
 
 {% block content %}
-    <div class="catalogo-container">
-        {% for producto in productos %}
-        <a href="{% url 'producto_detalle' producto.id %}" class="card-link">
-            <div class="producto-card">
-                <img src="{{ producto.url_imagen }}" alt="Imagen de {{ producto.nombre }}">
-                <div class="card-content">
-                    <h2>{{ producto.nombre }}</h2>
-                </div>
-                <p class="precio">${{ producto.precio }}</p>
-            </div>
-        </a>
-        {% endfor %}
+{# ======= Sección Hero (presentación principal) ======= #}
+<div class="hero-section">
+    <div class="hero-content">
+        <h1 class="hero-title">10tendencias</h1>
+        <p class="hero-subtitle">Productos 100% ecuatorianos con frases motivacionales que inspiran</p>
+        <div class="hero-badge">
+            <span class="badge-text">🇪🇨 Hecho en Ecuador</span>
+        </div>
     </div>
+</div>
+
+{# ======= Sección de Productos ======= #}
+<div class="products-section">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Nuestro Catálogo</h2>
+            <p class="section-description">Descubre productos únicos con mensajes que transforman tu día</p>
+        </div>
+        
+        <div class="products-grid">
+            {# Recorre todos los productos y los muestra en tarjetas #}
+            {% for producto in productos %}
+            <div class="product-card">
+                <div class="product-image-container">
+                    <img src="{{ producto.url_imagen }}" alt="{{ producto.nombre }}" class="product-image">
+                    <div class="product-overlay">
+                        <div class="overlay-content">
+                            <span class="made-in-ecuador">🇪🇨 100% Ecuatoriano</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="product-info">
+                    <h3 class="product-name">{{ producto.nombre }}</h3>
+                    <p class="product-description">{{ producto.descripcion }}</p>
+                    <div class="product-footer">
+                        <span class="product-price">${{ producto.precio }}</span>
+                        {# Botón para personalizar el producto, lleva al detalle #}
+                        <a href="{% url 'producto_detalle' producto.id %}" class="customize-btn">
+                            <span>Personalizar</span>
+                            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{# ======= Footer ======= #}
+<footer class="footer-section">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h3 class="footer-title">10tendencias</h3>
+                <p class="footer-slogan">"Inspirando sueños, creando tendencias ecuatorianas"</p>
+            </div>
+            <div class="footer-info">
+                <div class="footer-item">
+                    <span class="footer-icon">🇪🇨</span>
+                    <span>Productos 100% ecuatorianos</span>
+                </div>
+                <div class="footer-item">
+                    <span class="footer-icon">💪</span>
+                    <span>Calidad y motivación garantizada</span>
+                </div>
+                <div class="footer-item">
+                    <span class="footer-icon">✨</span>
+                    <span>Diseños únicos y personalizables</span>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 10tendencias. Todos los derechos reservados.</p>
+        </div>
+    </div>
+</footer>
 {% endblock %}

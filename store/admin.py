@@ -1,3 +1,6 @@
+# Patrón: Admin Site (Sitio de Administración)
+# Este archivo registra los modelos para su gestión en el panel de administración de Django.
+# Permite a los administradores gestionar los datos de la aplicación de forma sencilla.
 from django.contrib import admin
 from .models import Pais, Provincia, Ciudad, FraseMotivacional, Producto
 from .models import Pedido, DetallePedido, DatosFacturacion
@@ -12,3 +15,12 @@ admin.site.register(Producto)
 admin.site.register(Pedido)
 admin.site.register(DetallePedido)
 admin.site.register(DatosFacturacion)
+
+class FraseMotivacionalAdmin(admin.ModelAdmin):
+    list_display = ('texto', 'destacada')
+    list_filter = ('destacada',)
+    search_fields = ('texto',)
+
+# Elimino cualquier registro duplicado de FraseMotivacional
+admin.site.unregister(FraseMotivacional)
+admin.site.register(FraseMotivacional, FraseMotivacionalAdmin)

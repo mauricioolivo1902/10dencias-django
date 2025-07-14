@@ -1,3 +1,6 @@
+# Patrón: Entry Point (Punto de Entrada)
+# Este archivo permite ejecutar comandos administrativos de Django (runserver, migrate, etc.).
+# Es el punto de inicio para la gestión del proyecto desde la línea de comandos.
 #!/usr/bin/env python
 """Django's command-line utility for administrative tasks."""
 import os

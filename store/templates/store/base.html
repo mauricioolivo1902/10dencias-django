@@ -4,25 +4,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}10dencias{% endblock %}</title>
+    <title>{% block title %}10tendencias{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'store/css/styles.css' %}">
     {% block extra_head %}{% endblock %}
 </head>
 <body>
-    <header>
-        <a href="{% url 'cart_detail' %}" style="text-decoration: none; color: white;">
-            Carrito ({{ cart_item_count }})
-        </a>
-        <div class="header-cart">
-            {# TODO: Enlazar a la página del carrito #}
-            <a href="#" style="text-decoration: none; color: white;">
-                Carrito ({{ cart_item_count }})
-            </a>
+    {# ======= Header y Navegación principal ======= #}
+    <nav class="main-nav">
+        <div class="container">
+            <div class="nav-content">
+                {# Logo de la tienda, redirige al catálogo #}
+                <a href="{% url 'catalogo' %}" class="nav-logo">
+                    <span class="logo-text">10tendencias</span>
+                </a>
+                <div class="nav-links">
+                    {# Enlace al catálogo #}
+                    <a href="{% url 'catalogo' %}" class="nav-link">Catálogo</a>
+                    {# Enlace al carrito, muestra el número de productos #}
+                    <a href="{% url 'cart_detail' %}" class="nav-link cart-link">
+                        <svg class="cart-icon-nav" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01"/>
+                        </svg>
+                        <span class="cart-count">{{ cart_item_count }}</span>
+                    </a>
+                </div>
+            </div>
         </div>
-    </header>
+    </nav>
+
+    {# ======= Contenido principal ======= #}
     <main>
         {% block content %}{% endblock %}
     </main>
     {% block extra_scripts %}{% endblock %}
+
+    {# ======= Footer (puedes agregar aquí si lo necesitas) ======= #}
 </body>
 </html>

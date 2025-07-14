@@ -1,52 +1,154 @@
+{# Patrón: Template (T de MTV/MVC) #}
+{# Esta plantilla renderiza la interfaz de usuario del detalle de producto. #}
+{# Patrón: Template Method #}
+{# Extiende base.html y redefine bloques específicos para personalizar la página. #}
+{% extends 'store/base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {# Usamos el nombre del producto en el título de la página #}
-    <title>{{ producto.nombre }} - 10dencias</title>
-    <link rel="stylesheet" href="{% static 'store/css/styles.css' %}">
-</head>
-<body>
 
-    <header>
-        {# Un enlace para volver fácilmente al catálogo #}
-        <a href="{% url 'catalogo' %}" class="back-link">← Volver al Catálogo</a>
-        <h1>Detalles del Producto</h1>
-    </header>
+{% block title %}{{ producto.nombre }} - 10tendencias{% endblock %}
 
-    <main>
-        <div class="detalle-container">
-            <div class="detalle-imagen">
-                <img src="{{ producto.url_imagen }}" alt="Imagen de {{ producto.nombre }}">
+{% block content %}
+{# ======= Sección Hero (presentación del producto) ======= #}
+<div class="hero-section product-hero">
+    <div class="hero-content">
+        <a href="{% url 'catalogo' %}" class="back-link-modern">
+            <svg class="back-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            Volver al Catálogo
+        </a>
+        <h1 class="hero-title">{{ producto.nombre }}</h1>
+        <div class="hero-badge">
+            <span class="badge-text">🇪🇨 100% Ecuatoriano</span>
+        </div>
+    </div>
+</div>
+
+{# ======= Detalle del Producto ======= #}
+<div class="product-detail-section">
+    <div class="container">
+        <div class="product-detail-grid">
+            <!-- Imagen del producto -->
+            <div class="product-image-section">
+                <div class="product-image-container-large">
+                    <img src="{{ producto.url_imagen }}" alt="{{ producto.nombre }}" class="product-image-large">
+                    <div class="product-badge-overlay">
+                        <span class="made-in-ecuador-large">🇪🇨 Hecho en Ecuador</span>
+                    </div>
+                </div>
             </div>
-            <div class="detalle-info">
-                <h2>{{ producto.nombre }}</h2>
-                <p class="precio-detalle">${{ producto.precio }}</p>
-                
-                <hr>
 
-                <h3>Personaliza tu producto</h3>
-                <p>Elige una de nuestras frases motivacionales:</p>
+            <!-- Información y personalización -->
+            <div class="product-info-section">
+                <div class="product-header">
+                    <h2 class="product-title">{{ producto.nombre }}</h2>
+                    <p class="product-description-large">{{ producto.descripcion }}</p>
+                    <div class="price-section">
+                        <span class="price-large">${{ producto.precio }}</span>
+                    </div>
+                </div>
 
-                    <form action="{% url 'add_to_cart' producto.id %}" method="POST" class="frases-form">
+                <div class="customization-section">
+                    <h3 class="customization-title">Personaliza tu producto</h3>
+                    <p class="customization-subtitle">Elige una de nuestras frases motivacionales destacadas:</p>
+
+                    {% if frases %}
+                    <form action="{% url 'add_to_cart' producto.id %}" method="POST" class="customization-form">
                         {% csrf_token %}
-
-                        <div class="frases-selector">
+                        <div class="phrases-grid">
                             {% for frase in frases %}
-                            <div class="frase-option">
-                                <input type="radio" id="frase{{ frase.id }}" name="frase_seleccionada" value="{{ frase.id }}" required>
-                                <label for="frase{{ frase.id }}">{{ frase.texto }}</label>
+                            <div class="phrase-card phrase-card-featured">
+                                <input type="radio" id="frase{{ frase.id }}" name="frase_seleccionada" value="{{ frase.id }}" required class="phrase-radio">
+                                <label for="frase{{ frase.id }}" class="phrase-label">
+                                    <div class="phrase-content">
+                                        <span class="phrase-text" style="font-size:1.2em;font-weight:bold;">{{ frase.texto|linebreaksbr }}</span>
+                                        <span class="featured-badge">⭐ Frase destacada</span>
+                                        <div class="phrase-check">
+                                            <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path d="M20 6L9 17l-5-5"/>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </label>
                             </div>
                             {% endfor %}
                         </div>
-
-                        <button type="submit" class="btn-comprar">Añadir al Carrito</button>
+                        <button type="submit" class="add-to-cart-btn">
+                            <span>Añadir al Carrito</span>
+                            <svg class="cart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01"/>
+                            </svg>
+                        </button>
                     </form>
+                    {% else %}
+                    <div class="no-featured-phrases">
+                        <p style="color:#b91c1c;font-weight:bold;">No hay frases destacadas disponibles. El administrador debe seleccionar hasta 3 frases en el panel de administración.</p>
+                    </div>
+                    {% endif %}
+                </div>
             </div>
         </div>
-    </main>
+    </div>
+</div>
 
-</body>
-</html>
+{# ======= Footer ======= #}
+<footer class="footer-section">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h3 class="footer-title">10tendencias</h3>
+                <p class="footer-slogan">"Inspirando sueños, creando tendencias ecuatorianas"</p>
+            </div>
+            <div class="footer-info">
+                <div class="footer-item">
+                    <span class="footer-icon">🇪🇨</span>
+                    <span>Productos 100% ecuatorianos</span>
+                </div>
+                <div class="footer-item">
+                    <span class="footer-icon">💪</span>
+                    <span>Calidad y motivación garantizada</span>
+                </div>
+                <div class="footer-item">
+                    <span class="footer-icon">✨</span>
+                    <span>Diseños únicos y personalizables</span>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 10tendencias. Todos los derechos reservados.</p>
+        </div>
+    </div>
+</footer>
+{% endblock %}
+
+<style>
+.phrase-card-featured {
+    border: 2px solid #10B981;
+    border-radius: 12px;
+    background: #f0fdf4;
+    margin-bottom: 1.2em;
+    box-shadow: 0 2px 8px #10b98122;
+    transition: box-shadow 0.2s;
+}
+.phrase-card-featured:hover {
+    box-shadow: 0 4px 16px #10b98144;
+}
+.featured-badge {
+    display: inline-block;
+    background: #10B981;
+    color: #fff;
+    font-size: 0.85em;
+    border-radius: 6px;
+    padding: 2px 8px;
+    margin-top: 8px;
+    margin-bottom: 4px;
+}
+.no-featured-phrases {
+    background: #fef2f2;
+    border: 1px solid #fca5a5;
+    border-radius: 8px;
+    padding: 1em;
+    margin-bottom: 1em;
+    text-align: center;
+}
+</style>

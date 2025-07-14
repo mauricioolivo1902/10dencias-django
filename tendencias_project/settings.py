@@ -1,3 +1,6 @@
+# Patrón: Configuración Global (Settings)
+# Este archivo centraliza la configuración del proyecto Django.
+# Permite definir parámetros globales como bases de datos, apps instaladas, rutas estáticas, etc.
 """
 Django settings for tendencias_project project.
 
@@ -21,9 +24,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
-SECRET_KEY = config('SECRET_KEY') # AÑADE ESTA LÍNEA
+SECRET_KEY = 'django-insecure-your-secret-key-here-for-development-only'
 
-DEBUG = config('DEBUG', default=False, cast=bool) # AÑADE ESTA LÍNEA
+DEBUG = True
 
 ALLOWED_HOSTS = []
 

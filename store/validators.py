@@ -1,5 +1,7 @@
 from django.core.exceptions import ValidationError
 
+# Patrón: Strategy
+# Cada clase validadora implementa una estrategia de validación diferente.
 class IDValidator:
     """
     Clase base que actúa como nuestra "Interfaz" para los validadores.
@@ -27,6 +29,8 @@ class ColombianIDValidator(IDValidator):
             raise ValidationError("La cédula colombiana debe tener entre 7 y 11 dígitos.")
         return id_number
 
+# Patrón: Factory
+# Esta clase devuelve el validador adecuado según el país.
 class ValidatorFactory:
     """
     Esta es nuestra Fábrica. Su única responsabilidad es crear y devolver

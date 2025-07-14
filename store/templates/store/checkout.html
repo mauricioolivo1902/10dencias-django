@@ -1,23 +1,229 @@
+{# Patrón: Template (T de MTV/MVC) #}
+{# Esta plantilla renderiza la interfaz de usuario del checkout. #}
+{# Patrón: Template Method #}
+{# Extiende base.html y redefine bloques específicos para personalizar la página. #}
 {% extends 'store/base.html' %}
 {% load static %}
 
-{% block title %}Finalizar Compra - 10dencias{% endblock %}
+{% block title %}Finalizar Compra - 10tendencias{% endblock %}
 
 {% block content %}
-<div class="checkout-container">
-    <h2>Finalizar Compra</h2>
-    <p>Por favor, completa tus datos para realizar el pedido.</p>
-
-    <form method="POST" class="checkout-form">
-        {% csrf_token %}
-        
-        {# Django renderizará el formulario. 'as_p' envuelve cada campo en un párrafo <p>. #}
-        {{ form.as_p }}
-        
-        <button type="submit" class="btn-comprar">Realizar Pedido</button>
-    </form>
+{# ======= Sección Hero (presentación del checkout) ======= #}
+<div class="hero-section checkout-hero">
+    <div class="hero-content">
+        <h1 class="hero-title">Finalizar Compra</h1>
+        <p class="hero-subtitle">Completa tus datos para recibir tus productos personalizados</p>
+        <div class="hero-badge">
+            <span class="badge-text">🇪🇨 Envío a todo Ecuador</span>
+        </div>
+    </div>
 </div>
 
+{# ======= Sección de Checkout ======= #}
+<div class="checkout-section">
+    <div class="container">
+        <div class="checkout-grid">
+            {# Resumen del pedido a la izquierda #}
+            <div class="order-summary-section">
+                <div class="summary-card">
+                    <h3 class="summary-title">Resumen del Pedido</h3>
+                    <div class="order-items">
+                        {# Lista de productos en el carrito #}
+                        {% for item_id, item_data in cart.items %}
+                        <div class="order-item">
+                            <div class="item-image">
+                                <img src="{{ item_data.producto_imagen }}" alt="{{ item_data.producto_nombre }}">
+                            </div>
+                            <div class="item-details">
+                                <h4 class="item-name">{{ item_data.producto_nombre }}</h4>
+                                <p class="item-phrase">{{ item_data.frase_texto }}</p>
+                                <div class="item-meta">
+                                    <span class="item-quantity">Cantidad: {{ item_data.cantidad }}</span>
+                                    <span class="item-price">${{ item_data.precio|floatformat:2 }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="order-total">
+                        <div class="total-row">
+                            <span class="total-label">Total del Pedido:</span>
+                            <span class="total-amount">${{ cart_total|floatformat:2 }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {# Formulario de checkout a la derecha #}
+            <div class="checkout-form-section">
+                <div class="form-card">
+                    <h3 class="form-title">Datos de Facturación</h3>
+                    <p class="form-subtitle">Completa tus datos para procesar el pedido</p>
+
+                    {# Formulario de datos personales, dirección y cupón #}
+                    <form method="post" class="checkout-form-modern">
+                        {% csrf_token %}
+                        
+                        <div class="form-grid">
+                            <!-- Información personal -->
+                            <div class="form-group">
+                                <label for="{{ form.nombre.id_for_label }}" class="form-label">
+                                    <span class="label-icon">👤</span>
+                                    Nombre
+                                </label>
+                                {{ form.nombre }}
+                                {% if form.nombre.errors %}
+                                <div class="error-message">{{ form.nombre.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="form-group">
+                                <label for="{{ form.apellido.id_for_label }}" class="form-label">
+                                    <span class="label-icon">👤</span>
+                                    Apellido
+                                </label>
+                                {{ form.apellido }}
+                                {% if form.apellido.errors %}
+                                <div class="error-message">{{ form.apellido.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="form-group">
+                                <label for="{{ form.numero_identificacion.id_for_label }}" class="form-label">
+                                    <span class="label-icon">🆔</span>
+                                    Número de Identificación
+                                </label>
+                                {{ form.numero_identificacion }}
+                                {% if form.numero_identificacion.errors %}
+                                <div class="error-message">{{ form.numero_identificacion.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Información de ubicación -->
+                            <div class="form-group">
+                                <label for="{{ form.pais.id_for_label }}" class="form-label">
+                                    <span class="label-icon">🌍</span>
+                                    País
+                                </label>
+                                {{ form.pais }}
+                                {% if form.pais.errors %}
+                                <div class="error-message">{{ form.pais.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="form-group">
+                                <label for="{{ form.provincia.id_for_label }}" class="form-label">
+                                    <span class="label-icon">🏛️</span>
+                                    Provincia
+                                </label>
+                                {{ form.provincia }}
+                                {% if form.provincia.errors %}
+                                <div class="error-message">{{ form.provincia.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="form-group">
+                                <label for="{{ form.ciudad.id_for_label }}" class="form-label">
+                                    <span class="label-icon">🏙️</span>
+                                    Ciudad
+                                </label>
+                                {{ form.ciudad }}
+                                {% if form.ciudad.errors %}
+                                <div class="error-message">{{ form.ciudad.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="{{ form.direccion_linea_1.id_for_label }}" class="form-label">
+                                    <span class="label-icon">📍</span>
+                                    Dirección
+                                </label>
+                                {{ form.direccion_linea_1 }}
+                                {% if form.direccion_linea_1.errors %}
+                                <div class="error-message">{{ form.direccion_linea_1.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Apartado de cupón de descuento -->
+                            <div class="form-group cupon-group">
+                                <label for="id_cupon">Cupón de descuento</label>
+                                <div class="cupon-flex">
+                                    <input type="text" name="cupon" id="id_cupon" value="{{ form.cupon.value|default:'' }}" placeholder="Ingresa tu cupón (ej: 10DENCIAS)" class="cupon-input">
+                                    <button type="submit" name="aplicar_cupon" class="place-order-btn cupon-btn">Aplicar</button>
+                                </div>
+                                {# Mensaje de error o éxito del cupón #}
+                                {% if cupon_error %}
+                                    <div class="error-message">{{ cupon_error }}</div>
+                                {% endif %}
+                                {% if cupon_aplicado %}
+                                    <div class="success-message">Cupón aplicado: <strong>{{ cupon_aplicado.codigo }}</strong> ({{ cupon_aplicado.descuento_porcentaje }}% de descuento)</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="form-actions" style="margin-top: 2rem;">
+                            <button type="submit" name="finalizar_compra" class="place-order-btn">Finalizar compra</button>
+                        </div>
+
+                        {# Resumen del pedido dentro del formulario para mantener el estado #}
+                        <div class="order-summary-section" style="margin-top: 2rem;">
+                            <div class="summary-card">
+                                <div class="summary-title">Resumen del pedido</div>
+                                <div class="summary-content">
+                                    <div class="summary-row">
+                                        <span class="summary-label">Subtotal:</span>
+                                        <span class="summary-value">${{ cart_total|floatformat:2 }}</span>
+                                    </div>
+                                    {% if descuento and descuento > 0 %}
+                                    <div class="summary-row">
+                                        <span class="summary-label">Descuento:</span>
+                                        <span class="summary-value" style="color: #10B981;">- ${{ descuento|floatformat:2 }}</span>
+                                    </div>
+                                    {% endif %}
+                                    <div class="summary-row total-row">
+                                        <span class="summary-label total-label">Total a pagar:</span>
+                                        <span class="summary-value total-amount">${{ total_final|floatformat:2 }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{# ======= Footer ======= #}
+<footer class="footer-section">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h3 class="footer-title">10tendencias</h3>
+                <p class="footer-slogan">"Inspirando sueños, creando tendencias ecuatorianas"</p>
+            </div>
+            <div class="footer-info">
+                <div class="footer-item">
+                    <span class="footer-icon">🇪🇨</span>
+                    <span>Productos 100% ecuatorianos</span>
+                </div>
+                <div class="footer-item">
+                    <span class="footer-icon">💪</span>
+                    <span>Calidad y motivación garantizada</span>
+                </div>
+                <div class="footer-item">
+                    <span class="footer-icon">✨</span>
+                    <span>Diseños únicos y personalizables</span>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 10tendencias. Todos los derechos reservados.</p>
+        </div>
+    </div>
+</footer>
+
+{# ======= Script para cargar provincias y ciudades dinámicamente ======= #}
 <script>
     // Esperamos a que todo el contenido de la página (DOM) esté cargado.
     document.addEventListener('DOMContentLoaded', function() {
@@ -46,40 +252,36 @@
                     // Poblamos el desplegable de provincias con los datos recibidos
                     provincias.forEach(function(provincia) {
                         // Creamos un nuevo elemento <option>
-                        const option = new Option(provincia.nombre, provincia.id);
-                        // Lo añadimos al desplegable de provincias
+                        const option = document.createElement('option');
+                        option.value = provincia.id;
+                        option.textContent = provincia.nombre;
                         provinciaSelect.appendChild(option);
                     });
                 } catch (error) {
-                    console.error('Error al obtener las provincias:', error);
+                    console.error('Error al cargar provincias:', error);
                 }
             }
         });
 
         // --- Event Listener para el desplegable de Provincia ---
         provinciaSelect.addEventListener('change', async function() {
-            const provinciaId = this.value; // Obtenemos el ID de la provincia seleccionada
-
-            // Limpiamos el desplegable de ciudades
+            const provinciaId = this.value;
             ciudadSelect.innerHTML = '<option value="">---------</option>';
-
             if (provinciaId) {
                 try {
-                    // Llamamos a nuestra API de ciudades
                     const response = await fetch(`/catalogo/api/ciudades/?provincia_id=${provinciaId}`);
                     const ciudades = await response.json();
-
-                    // Poblamos el desplegable de ciudades
                     ciudades.forEach(function(ciudad) {
-                        const option = new Option(ciudad.nombre, ciudad.id);
+                        const option = document.createElement('option');
+                        option.value = ciudad.id;
+                        option.textContent = ciudad.nombre;
                         ciudadSelect.appendChild(option);
                     });
                 } catch (error) {
-                    console.error('Error al obtener las ciudades:', error);
+                    console.error('Error al cargar ciudades:', error);
                 }
             }
         });
-
     });
 </script>
 {% endblock %}
