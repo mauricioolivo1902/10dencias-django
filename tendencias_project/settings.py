@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-your-secret-key-here-for-development-only'
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['estebanolivo.pythonanywhere.com', '127.0.0.1', 'localhost']
 
 
 # Application definition
