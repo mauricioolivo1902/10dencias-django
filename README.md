@@ -1,102 +1,136 @@
-# 10tendencias - E-commerce de Productos Personalizables
+# 10dencias - E-commerce de Productos Personalizables
 
 ## Descripción
 
-**10tendencias** es una tienda online desarrollada en Django para la venta de productos personalizables con frases motivacionales. El objetivo es ofrecer una experiencia de compra moderna, intuitiva y visualmente atractiva, permitiendo a los usuarios elegir productos, personalizarlos y finalizar su compra de manera sencilla.
+10dencias es una plataforma e-commerce innovadora, construida con el framework Django, que permite a los usuarios personalizar productos como tazas, camisetas y hoodies con frases motivacionales inspiradoras. Surge como respuesta a la creciente demanda de experiencias de compra únicas, potenciando la conexión emocional con cada artículo adquirido.
 
-## Funcionalidades principales
+El sistema está diseñado con una arquitectura modular que separa claramente la lógica de negocio, la gestión de datos y la presentación visual, adhiriéndose a los principios SOLID y a las buenas prácticas de desarrollo para garantizar un código mantenible, escalable y fácil de documentar.
 
-- **Catálogo de productos**: Visualización de 10 productos personalizables (tazas, camisetas, hoodies, medias, gorras, agendas, bolsos, termos, macetas, mochilas) con descripción, imagen y botón de personalización.
-- **Detalle de producto**: Página moderna con hero section, selección de frases motivacionales y personalización.
-- **Carrito de compras**: Carrito funcional y responsivo, con contador de ítems, resumen, eliminación de productos y acceso al checkout.
-- **Checkout**: Proceso de compra moderno, con formulario validado, selección dinámica de país, provincia y ciudad (incluye todas las provincias y principales ciudades de Ecuador), resumen del pedido y soporte para cupones de descuento.
-- **Cupones de descuento**: Aplicación de cupones (ejemplo: "10DENCIAS" con 10% de descuento), visualización del descuento y total actualizado.
-- **Pedido exitoso**: Página de confirmación con resumen del pedido y diseño consistente.
-- **Gestión de sesión**: El carrito se almacena en la sesión del usuario para persistencia entre páginas.
-- **Panel de administración**: Gestión de productos, frases, pedidos y datos de facturación desde el admin de Django.
+---
 
-## Patrones de diseño aplicados (con ejemplos)
+## Funcionalidades Principales
 
-- **MTV (Modelo-Template-Vista)**: Separación clara entre modelos (`models.py`), vistas (`views.py`) y templates (`templates/store/`).
-  - *Ejemplo*: El modelo `Producto` define la estructura de los productos, la vista `catalogo` prepara los datos y el template `catalogo.html` los muestra.
-- **Service Layer (Capa de Servicios)**: Lógica de negocio centralizada en servicios como `PedidoService` (`services.py`).
-  - *Ejemplo*: `PedidoService` se encarga de crear pedidos, separando la lógica de negocio de las vistas.
-- **Form Object**: Formularios personalizados para validación y procesamiento de datos de usuario (`forms.py`).
-  - *Ejemplo*: `CheckoutForm` encapsula la validación de los datos de facturación y el cupón.
-- **Factory**: Uso de `ValidatorFactory` (`validators.py`) para obtener validadores de identificación según el país.
-  - *Ejemplo*: En `CheckoutForm`, se llama a `ValidatorFactory.get_validator(pais)` para obtener el validador adecuado. Esto permite agregar nuevos validadores fácilmente y ayuda a cumplir el principio OCP.
-- **Strategy**: Validadores de identificación implementan diferentes estrategias según el país (`validators.py`).
-  - *Ejemplo*: `EcuadorianIDValidator` y `ColombianIDValidator` implementan el método `validate` con reglas distintas, y el formulario usa la estrategia adecuada según el país.
-- **Template Method**: Herencia de plantillas base (`base.html`) para mantener una estructura y diseño consistentes.
-  - *Ejemplo*: `checkout.html` y `catalogo.html` extienden `base.html` y redefinen bloques específicos.
-- **Repository (implícito)**: Acceso a datos a través del ORM de Django.
-  - *Ejemplo*: `Producto.objects.all()` en las vistas permite acceder a los productos sin preocuparse por la lógica de acceso a datos.
-- **Session Pattern**: Gestión del carrito y otros datos temporales en la sesión del usuario.
-  - *Ejemplo*: El carrito se almacena y recupera usando `request.session['cart']` en las vistas.
+### Para Clientes
 
-## Principios SOLID implementados (con ejemplos)
+* Catálogo de Productos: Explora un catálogo de 10 productos personalizables (tazas, camisetas, hoodies, medias, gorras, agendas, bolsos, termos, macetas, mochilas), cada uno con su descripción, imagen y un botón de personalización.
 
-- **SRP (Single Responsibility Principle)**: Cada clase y función tiene una única responsabilidad.
-  - *Ejemplo*: `PedidoService` solo gestiona la creación de pedidos; `CheckoutForm` solo valida datos del formulario.
-- **OCP (Open/Closed Principle)**: El sistema es fácilmente extensible sin modificar el código existente.
-  - *Ejemplo*: Para agregar un nuevo tipo de validador de identificación, solo se crea una nueva clase y se registra en `ValidatorFactory`, sin modificar el formulario.
-- **LSP (Liskov Substitution Principle)**: Las clases hijas pueden sustituir a la clase base sin alterar el funcionamiento.
-  - *Ejemplo*: Cualquier clase que herede de `IDValidator` puede ser utilizada por el formulario sin romper la lógica.
-- **ISP (Interface Segregation Principle)**: Las interfaces y clases están diseñadas para no forzar la implementación de métodos innecesarios.
-  - *Ejemplo*: Cada validador implementa solo el método `validate` necesario para su país.
-- **DIP (Dependency Inversion Principle)**: El formulario de checkout depende de abstracciones (validadores) y no de implementaciones concretas.
-  - *Ejemplo*: `CheckoutForm` utiliza la interfaz `IDValidator` a través de la fábrica, sin depender de una clase concreta.
+* Detalle de Producto y Personalización: Accede a una página de producto moderna que incluye una "hero section", la selección de frases motivacionales de un catálogo curado y opciones de personalización.
 
-## Estructura del proyecto
+* Carrito de Compras: Disfruta de un carrito funcional y responsivo, con un contador de ítems, resumen de los productos, opción para eliminar artículos y acceso directo al proceso de compra.
 
-```
-10dencias-django/
-├── manage.py
-├── README.md
-├── requirements.txt
-├── store/
-│   ├── admin.py
-│   ├── apps.py
-│   ├── context_processors.py
-│   ├── forms.py
-│   ├── migrations/
-│   ├── models.py
-│   ├── services.py
-│   ├── static/
-│   ├── templates/
-│   ├── tests.py
-│   ├── urls.py
-│   ├── validators.py
-│   └── views.py
-└── tendencias_project/
-    ├── __init__.py
-    ├── asgi.py
-    ├── settings.py
-    ├── urls.py
-    └── wsgi.py
-```
+* Proceso de Compra (Checkout): Completa tu compra a través de un proceso moderno con un formulario validado, selección dinámica de país, provincia y ciudad (con soporte para todas las provincias y principales ciudades de Ecuador mediante AJAX), resumen detallado del pedido y soporte para cupones de descuento.
 
-## Instalación y ejecución
+* Cupones de Descuento: Aplica cupones como "10DENCIAS" (con un 10% de descuento) para ver el descuento aplicado y el total actualizado en tu pedido.
 
-1. Clona el repositorio y accede a la carpeta del proyecto.
-2. Instala las dependencias con `pip install -r requirements.txt`.
-3. Realiza las migraciones con `python manage.py migrate`.
-4. Crea un superusuario con `python manage.py createsuperuser` (opcional, para acceder al admin).
-5. Ejecuta el servidor de desarrollo con `python manage.py runserver`.
-6. Accede a la tienda en [http://127.0.0.1:8000/](http://127.0.0.1:8000/).
+* Gestión de Sesión: El carrito de compras y otros datos temporales se almacenan en la sesión del usuario, asegurando la persistencia de la información entre diferentes páginas.
 
-## Créditos
+### Para Administradores
 
-Desarrollado por [Tu Nombre] para la materia de Tendencias de Desarrollo de Software - UDLA.
+* Panel de Administración: Gestiona de forma centralizada productos, frases motivacionales, pedidos y datos de facturación a través del panel de administración de Django.
 
-## Frases motivacionales destacadas (ZenQuotes)
+* Gestión de Frases Motivacionales: Importa automáticamente frases desde la **API pública de ZenQuotes**, edítalas, elimínalas y selecciona hasta tres como "destacadas" para que aparezcan de forma resaltada en la personalización de productos.
 
-- El sistema permite importar automáticamente frases motivacionales desde la API pública de ZenQuotes (https://zenquotes.io/).
-- Todas las frases importadas aparecen en el panel de administración, en la sección "Frases motivacionales".
-- El administrador puede marcar hasta 3 frases como "destacadas" usando el campo booleano correspondiente.
-- Solo las frases destacadas se mostrarán como opciones de personalización en la página de cada producto.
-- Si no hay frases destacadas, se muestra un mensaje informativo en la web.
-- Para importar nuevas frases, ejecuta:
-  ```bash
-  python manage.py import_zenquotes
-  ```
+---
+
+## Restricciones y Limitaciones del Proyecto
+
+Para mantener el enfoque en la calidad y la viabilidad del producto base, 10dencias cuenta con las siguientes restricciones:
+
+* Sin Comunicación entre Usuarios: No incluye módulos de mensajería, comentarios, valoraciones o cualquier tipo de interacción social entre clientes.
+
+* Sin Gestión de Inventario en Tiempo Real: El control de stock de productos debe realizarse manualmente desde el panel de administración, no hay un sistema automático.
+
+* Sin Integración con Pasarelas de Pago Reales: El sistema no procesa pagos en línea ni se integra con servicios de pago externos (ej. PayPal, Stripe). El flujo de compra finaliza con la confirmación del pedido.
+
+* Sin Gestión de Envíos: No incluye funcionalidades para la gestión de envíos, seguimiento de pedidos o notificaciones automáticas al usuario sobre el estado de su orden.
+
+---
+
+## Arquitectura y Patrones de Diseño
+
+10dencias está construido sobre el framework **Django**, adoptando una arquitectura que garantiza la **mantenibilidad, escalabilidad y flexibilidad**. Se han aplicado los siguientes principios y patrones de diseño:
+
+### Principios SOLID
+
+* SRP (Single Responsibility Principle - Principio de Responsabilidad Única): Cada clase o módulo tiene una única razón para cambiar.
+    * Ejemplo: La lógica compleja de creación de pedidos y gestión del carrito se encuentra centralizada en la capa de servicios (`services.py`), mientras que las vistas (`views.py`) se encargan exclusivamente de recibir peticiones, validar datos y delegar la lógica correspondiente.
+
+* OCP (Open/Closed Principle - Principio Abierto/Cerrado): El software debe estar abierto a la extensión, pero cerrado a la modificación.
+    * Ejemplo: Para añadir un nuevo tipo de validador de identificación para otro país, simplemente se crea una nueva clase validadora y se integra en la factoría, sin modificar el código existente del formulario de checkout.
+
+* LSP (Liskov Substitution Principle - Principio de Sustitución de Liskov): Las clases derivadas deben poder sustituir a sus clases base sin alterar la corrección del programa.
+    * Ejemplo: Cualquier clase que herede de una interfaz o clase base de validador (`EstrategiaValidacion` en `validators.py`) puede ser utilizada por el formulario de checkout sin romper su lógica.
+
+
+### Patrones de Diseño Aplicados
+
+* MTV (Modelo-Template-Vista): Implementación estándar de Django para la separación de responsabilidades.
+
+* Service Layer (Capa de Servicios): Centraliza la lógica de negocio compleja para mantener las vistas limpias y enfocadas en la interacción HTTP.
+    * Ejemplo: `services.py` contiene funciones como `crear_pedido` que encapsulan la lógica de negocio para procesar una compra.
+
+* Form Object: Utilización de formularios dedicados para la validación y procesamiento de datos específicos del usuario.
+    * Ejemplo: `CheckoutForm` en `forms.py` maneja la validación de todos los datos necesarios para completar un pedido.
+
+* Factory: Se utiliza para la creación de instancias de validadores de identificación de manera dinámica.
+    * Ejemplo: La función `obtener_validador` en `validators.py` actúa como una factoría, devolviendo la instancia de validador adecuada según el país.
+
+* Strategy: Permite definir una familia de algoritmos, encapsular cada uno como un objeto y hacerlos intercambiables.
+    * Ejemplo: Las clases `ValidacionEcuador` y `ValidacionColombia` en `validators.py` implementan diferentes estrategias para la validación de identificaciones, que son seleccionadas dinámicamente.
+
+* Template Method: Uso de herencia de plantillas base para mantener una estructura y diseño consistentes en todo el sitio.
+    * Ejemplo: `checkout.html` y `catalogo.html` extienden `base.html` y redefinen bloques específicos para su contenido.
+
+* Session Pattern: Gestión del carrito de compras y otros datos temporales directamente en la sesión del usuario para una experiencia persistente.
+
+---
+
+## Instalación y Ejecución
+
+Sigue estos pasos para configurar y ejecutar el proyecto 10dencias en tu entorno local:
+
+1.  **Clona el repositorio**:
+    ```bash
+    git clone https://github.com/mauricioolivo1902/10dencias-django
+    cd 10dencias-django
+    ```
+2.  **Instala las dependencias**:
+    ```bash
+    pip install -r requirements.txt
+    ```
+3.  **Realiza las migraciones de la base de datos**:
+    ```bash
+    python manage.py migrate
+    ```
+4.  **Crea un superusuario (opcional)**: Necesario si deseas acceder al panel de administración de Django.
+    ```bash
+    python manage.py createsuperuser
+    ```
+    Sigue las instrucciones en pantalla para crear tu usuario.
+5.  **Ejecuta el servidor de desarrollo**:
+    ```bash
+    python manage.py runserver
+    ```
+6.  **Accede a la tienda**: Abre tu navegador y visita http://127.0.0.1:8000/catalogo.
+
+### Frases Motivacionales de ZenQuotes
+
+Para importar automáticamente frases motivacionales desde la API pública de ZenQuotes, ejecuta el siguiente comando:
+
+```bash
+python manage.py import_zenquotes
+
+
+---
+### Pruebas Funcionales
+
+El proyecto incluye pruebas automatizadas para garantizar la estabilidad y calidad del sistema. Estas pruebas, definidas en store/tests.py, verifican el correcto funcionamiento de procesos críticos como la personalización y compra de productos, así como la gestión de frases motivacionales.
+
+Para ejecutar las pruebas, navega a la raíz del proyecto en tu terminal y ejecuta:
+
+```bash
+python manage.py test store
+
+---
+### Créditos
+Desarrollado por Mauricio Olivo para la materia de Ingeniería Web de Ingeniería de Software - UDLA.

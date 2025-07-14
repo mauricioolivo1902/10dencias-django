@@ -6,13 +6,10 @@ from django.urls import reverse
 from django.http import JsonResponse
 from .models import Provincia, Ciudad 
 from .services import PedidoService
-# Elimino import requests y toda la lógica de frases externas
 
 # Patrón: MTV (Modelo-Template-Vista, variante de MVC)
-# Este archivo contiene las Vistas, que gestionan la lógica de presentación y orquestan la interacción entre Modelos y Templates.
-# También se observa el uso de Service Layer (PedidoService), Repository (ORM de Django) y Session Pattern (manejo de carrito).
 
-# Vista para la página del catálogo (sin cambios)
+# Vista para la página del catálogo
 def catalogo(request):
     # Muestra todos los productos disponibles en el catálogo.
     productos = Producto.objects.all()
@@ -38,7 +35,7 @@ def producto_detalle(request, producto_id):
     }
     return render(request, 'store/producto_detalle.html', contexto)
     
-    # 4. Renderizamos la nueva plantilla 'producto_detalle.html' con el contexto.
+    # Renderizamos la nueva plantilla 'producto_detalle.html' con el contexto.
     return render(request, 'store/producto_detalle.html', contexto)
 
 def checkout_view(request):

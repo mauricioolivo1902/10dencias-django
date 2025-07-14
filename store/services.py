@@ -1,3 +1,6 @@
+# Principio de Responsabilidad Única (SRP):
+# Cada clase o función aquí tiene una única razón para cambiar: la lógica de negocio asociada a pedidos y servicios.
+
 from django.db import transaction
 from .models import Pedido, DetallePedido, DatosFacturacion, Producto, FraseMotivacional
 

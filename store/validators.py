@@ -1,5 +1,10 @@
 from django.core.exceptions import ValidationError
 
+# Principio Abierto/Cerrado (OCP):
+# Puedes agregar nuevos validadores para otros países creando nuevas subclases sin modificar el código existente.
+# Principio de Sustitución de Liskov (LSP):
+# Todas las subclases de ValidadorIdentificacionBase pueden ser usadas en lugar de la clase base sin alterar el funcionamiento.
+
 # Patrón: Strategy
 # Cada clase validadora implementa una estrategia de validación diferente.
 class IDValidator:
@@ -17,7 +22,6 @@ class EcuadorianIDValidator(IDValidator):
             raise ValidationError("El número de identificación solo debe contener dígitos.")
         if len(id_number) != 10:
             raise ValidationError("La cédula ecuatoriana debe tener exactamente 10 dígitos.")
-        # Aquí podría ir el algoritmo completo de validación de la cédula ecuatoriana.
         return id_number
 
 class ColombianIDValidator(IDValidator):

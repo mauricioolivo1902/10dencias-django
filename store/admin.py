@@ -21,6 +21,5 @@ class FraseMotivacionalAdmin(admin.ModelAdmin):
     list_filter = ('destacada',)
     search_fields = ('texto',)
 
-# Elimino cualquier registro duplicado de FraseMotivacional
 admin.site.unregister(FraseMotivacional)
 admin.site.register(FraseMotivacional, FraseMotivacionalAdmin)

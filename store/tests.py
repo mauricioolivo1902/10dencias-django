@@ -2,7 +2,6 @@ from django.test import TestCase, Client
 from django.contrib.auth.models import User
 from .models import Producto, FraseMotivacional, Pais, Provincia, Ciudad
 
-# Create your tests here.
 
 class PruebasTienda(TestCase):
     def setUp(self):
