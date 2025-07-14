@@ -1,19 +1,45 @@
 # Entorno virtual
 venv/
+ENV/
+.env
+*.env
 
-# Base de datos local
-db.sqlite3
+# Archivos de base de datos
 *.sqlite3
+*.db
+
+# Archivos de configuración locales
+*.local
+
+# Archivos de migraciones de Django
+**/migrations/*.pyc
+**/migrations/__pycache__/
 
 # Archivos de caché de Python
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
 
-# Archivos de configuración de VSCode
+# Archivos temporales y de sistema
+.DS_Store
+Thumbs.db
+*.log
+
+# Archivos de configuración de editores
 .vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
 
-# Archivo de variables de entorno (¡MUY IMPORTANTE!)
-.env
+# Archivos de compilación
+*.egg-info/
+dist/
+build/
 
-# Carpeta de archivos estáticos de producción
-staticfiles/
+# Archivos de coverage y testing
+htmlcov/
+.coverage
+.tox/
+
+# Archivos de node/npm (por si acaso)
+node_modules/
